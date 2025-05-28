@@ -1,4 +1,4 @@
-{% set version = "1.0.0" %}
+{% set version = "1.0.4" %}
 
 package:
   name: bactopia-assembler
@@ -7,23 +7,22 @@ package:
 build:
   number: 0
   noarch: generic
+  run_exports:
+    - {{ pin_subpackage('bactopia-assembler', max_pin='x') }}
 
 source:
   url: https://github.com/bactopia/bactopia-assembler/archive/v{{version}}.tar.gz
-  sha256: f8f0237c3858f7809b4a21dd603c880a299453b87ae91347e22b7d0eb6ab554b
+  sha256: fb332391d7c53db233716bfdc2adc1be25577a268bdb2b3a3fadcea168bcc816
 
 requirements:
   run:
     - coreutils
-    - dragonflye >=1.0.13 # [linux]
-    - gsl 2.6
+    - dragonflye >=1.2.0
     - importlib-metadata <5
-    - nanoq >=0.9.0 # [linux]
-    - python >3.6,<3.11
-    - pigz
     - sed
-    - shovill-se >=1.1.0se
-    - unicycler
+    - shovill-se
+    - skesa >=2.5.1
+    - unicycler >=0.5.0
     - wget
 
 test:

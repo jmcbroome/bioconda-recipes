@@ -1,37 +1,47 @@
 {% set name = "nextclade" %}
-{% set version = "2.11.0" %}
+{% set version = "3.14.0" %}
 
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
   - url: https://github.com/nextstrain/nextclade/releases/download/{{ version }}/{{ name }}-x86_64-unknown-linux-gnu   # [linux64]
-    sha256: cd08c6fdf5e01c2b3f78b3d18ab49be2903342cf437a2ec37de22a6ccf6fe552                                           # [linux64]
+    sha256: c1a837e15dcd0f9f11faaa36d3f71f43f3213afe1e85f49a19dd5e8345e56075                                           # [linux64]
+  - url: https://github.com/nextstrain/nextclade/releases/download/{{ version }}/{{ name }}-aarch64-unknown-linux-gnu  # [aarch64]
+    sha256: 93cb480f84878de0c8de54f7bb75f6b05d3b3e56cb3c4dad8523629f92ec13da                                           # [aarch64]
   - url: https://github.com/nextstrain/nextclade/releases/download/{{ version }}/{{ name }}-x86_64-apple-darwin        # [osx and x86_64]
-    sha256: 2a332fa41717030df426a70527d10ec270adf0ec7f3a5adb11d5d7a41cd63cc5                                           # [osx and x86_64]
-  - url: https://github.com/nextstrain/nextclade/releases/download/{{ version }}/{{ name }}-aarch64-apple-darwin       # [arm64]
-    sha256: bea9f9d3255aa94290200e29bf246c1a6aa17a13a355a8760c472964aa2bf9c8                                           # [arm64]
+    sha256: d95961cc767fd642b549e3f948922f16a1d4f8d34409c68ece4627edb8c29b25                                           # [osx and x86_64]
+  - url: https://github.com/nextstrain/nextclade/releases/download/{{ version }}/{{ name }}-aarch64-apple-darwin       # [osx and arm64]
+    sha256: 3f92e03f725a96d17f880bb4f7412dc055168fc0cc6b8d9c3c5c18f25be9888b                                           # [osx and arm64]
 
 build:
   number: 0
   binary_relocation: False
+  run_exports:
+  - {{ pin_compatible(name, max_pin='x') }}
 
 requirements:
+# Disable test for aarch64, as nextclade requires glibc 2.18 not available on aarch64
 
 test:
   commands:
-    - nextclade --help
+    - nextclade --help  # [not aarch64]
 
 about:
-  home: https://github.com/nextstrain/nextclade
+  home: "https://github.com/nextstrain/nextclade"
   license: MIT
   license_family: MIT
-  summary: "Viral genome alignment, mutation calling, clade assignment, quality checks and phylogenetic placement"
-  doc_url: https://docs.nextstrain.org/projects/nextclade/en/stable/
-  dev_url: https://github.com/nextstrain/nextclade
+  summary: "Viral genome alignment, mutation calling, clade assignment, quality checks and phylogenetic placement."
+  doc_url: "https://docs.nextstrain.org/projects/nextclade/en/stable"
+  dev_url: "https://github.com/nextstrain/nextclade"
 
 extra:
+  identifiers:
+    - doi:10.21105/joss.03773
+  additional-platforms:
+    - linux-aarch64
+    - osx-arm64
   recipe-maintainers:
     - pvanheus
     - corneliusroemer
